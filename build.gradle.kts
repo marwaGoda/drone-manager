@@ -26,6 +26,12 @@ dependencies {
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	// JUnit 5 libraries
+	testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
+	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
+
+	// Mockito for mocking
+	testImplementation("org.mockito:mockito-junit-jupiter:3.12.4")
 }
 
 tasks.withType<Test> {
