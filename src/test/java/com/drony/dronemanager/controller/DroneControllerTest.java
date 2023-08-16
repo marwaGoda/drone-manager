@@ -12,6 +12,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -44,6 +46,23 @@ public class DroneControllerTest {
         assertEquals(201, response.getStatusCodeValue());
         assertEquals(savedDrone, response.getBody());
     }
+    @Test
+    public void testGetAllDrones() {
+        List<Drone> expectedDrones = List.of(
+                new Drone(1L, "Drone1", "Desc1", new Coordinate(10.0, 10.0), 100.0, 5.0),
+                new Drone(2L, "Drone2", "Desc2", new Coordinate(20.0, 20.0), 105.0, 6.0)
+        );
+
+        when(droneService.getAllDrones()).thenReturn(expectedDrones);
+
+        ResponseEntity<Collection<Drone>> response = droneController.getAll();
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertNotNull(response.getBody());
+        assertEquals(2, response.getBody().size());
+        assertTrue(response.getBody().containsAll(expectedDrones));
+    }
+
     @Test
     public void testUpdateDroneWhenExists() {
         Drone updatedDrone = new Drone(1L, "Updated Drone", "Updated desc",

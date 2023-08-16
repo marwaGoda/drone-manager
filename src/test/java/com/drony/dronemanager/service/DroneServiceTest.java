@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,6 +64,21 @@ public class DroneServiceTest {
         Optional<Drone> result = droneService.getDroneById(1L);
 
         assertFalse(result.isPresent());
+    }
+    @Test
+    public void testGetAllDrones() {
+        List<Drone> expectedDrones = List.of(
+                new Drone(1L, "Drone1", "Desc1", new Coordinate(10.0, 10.0), 100.0, 5.0),
+                new Drone(2L, "Drone2", "Desc2", new Coordinate(20.0, 20.0), 105.0, 6.0)
+        );
+
+        when(droneRepository.findAll()).thenReturn(expectedDrones);
+
+        Collection<Drone> result = droneService.getAllDrones();
+
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertTrue(result.containsAll(expectedDrones));
     }
 
 

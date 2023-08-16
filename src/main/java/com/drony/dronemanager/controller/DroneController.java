@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/drones")
@@ -27,8 +28,8 @@ public class DroneController {
         return ResponseEntity.ok(droneService.calculateBoundary());
     }
    @GetMapping
-   public Collection<Drone> getAll() {
-       return droneService.getAllDrones();
+   public ResponseEntity<Collection<Drone>>  getAll() {
+        return new ResponseEntity<>(droneService.getAllDrones(), HttpStatus.OK);
    }
 
     @GetMapping("/{id}")
