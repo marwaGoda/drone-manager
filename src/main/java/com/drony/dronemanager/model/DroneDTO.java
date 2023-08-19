@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class Drone {
+public class DroneDTO {
     private Long id;
     private String name;
     private String description;

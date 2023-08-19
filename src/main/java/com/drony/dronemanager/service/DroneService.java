@@ -1,55 +1,66 @@
 package com.drony.dronemanager.service;
 
+import com.drony.dronemanager.entity.DroneEntity;
+import com.drony.dronemanager.mapper.DroneMapper;
 import com.drony.dronemanager.model.Boundary;
 import com.drony.dronemanager.model.Coordinate;
-import com.drony.dronemanager.model.Drone;
+import com.drony.dronemanager.model.DroneDTO;
 import com.drony.dronemanager.repository.DroneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class DroneService {
 
     @Autowired
     private DroneRepository droneRepository;
+    @Autowired
+    private DroneMapper droneMapper;
 
-    public Drone createDrone(Drone drone) {
-        return droneRepository.save(drone);
+    public DroneDTO createDrone(DroneDTO droneDto) {
+        DroneEntity entity = droneMapper.toEntity(droneDto);
+        DroneEntity savedEntity = droneRepository.save(entity);
+        return droneMapper.toDTO(savedEntity);
     }
 
-    public Optional<Drone> getDroneById(Long id) {
-        return droneRepository.findById(id);
+    public Optional<DroneDTO> getDroneById(Long id) {
+        return droneRepository.findById(id)
+                .map(droneMapper::toDTO);
     }
 
-    public Collection<Drone> getAllDrones() {
-        return droneRepository.findAll();
+    public List<DroneDTO> getAllDrones() {
+        return droneRepository.findAll().stream()
+                .map(droneMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public Optional<Drone> updateDrone(Long id, Drone updatedDrone) {
-        var existingDrone = droneRepository.findById(id);
-        if (existingDrone.isPresent()) {
-            Drone drone = existingDrone.get();
-            drone.setName(updatedDrone.getName());
-            drone.setDescription(updatedDrone.getDescription());
-            drone.setPosition(updatedDrone.getPosition());
-            drone.setHeight(updatedDrone.getHeight());
-            drone.setSpeed(updatedDrone.getSpeed());
+    public Optional<DroneDTO> updateDrone(Long id, DroneDTO updatedDroneDTO) {
+        var existingDroneEntity = droneRepository.findById(id);
+        if (existingDroneEntity.isPresent()) {
+            DroneEntity entityToUpdate = existingDroneEntity.get();
+            entityToUpdate.setName(updatedDroneDTO.getName());
+            entityToUpdate.setDescription(updatedDroneDTO.getDescription());
+            entityToUpdate.setLatitude(updatedDroneDTO.getPosition().getLatitude());
+            entityToUpdate.setLongitude(updatedDroneDTO.getPosition().getLongitude());
+            entityToUpdate.setHeight(updatedDroneDTO.getHeight());
+            entityToUpdate.setSpeed(updatedDroneDTO.getSpeed());
 
-            droneRepository.update(id, drone);
-            return Optional.ofNullable(drone);
+            DroneEntity updatedEntity = droneRepository.save(entityToUpdate);
+            return Optional.of(droneMapper.toDTO(updatedEntity));
         } else {
             return Optional.empty();
         }
     }
 
     public void deleteDrone(Long id) {
-        droneRepository.delete(id);
+        droneRepository.deleteById(id);
     }
     public Boundary calculateBoundary() {
-        var drones = droneRepository.findAll();
+        var drones = getAllDrones();
 
         if (drones.isEmpty()) {
             return new Boundary(new Coordinate(0, 0), 0);
