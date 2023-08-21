@@ -1,0 +1,182 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Drone Management System",
+    "description": "Operations pertaining to drones in the Drone Management System"
+  },
+  "basePath": "/api/drones",
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "View a list of available drones",
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved list",
+            "schema": {
+              "$ref": "#/definitions/DroneDTOList"
+            }
+          },
+          "401": {
+            "description": "You are not authorized to view the resource"
+          },
+          "403": {
+            "description": "Accessing the resource you were trying to reach is forbidden"
+          },
+          "404": {
+            "description": "The resource you were trying to reach is not found"
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a new drone",
+        "parameters": [
+          {
+            "name": "droneDTO",
+            "in": "body",
+            "description": "Drone data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DroneDTO"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successfully added the drone",
+            "schema": {
+              "$ref": "#/definitions/DroneDTO"
+            }
+          }
+        }
+      }
+    },
+    "/{id}": {
+      "get": {
+        "summary": "Get a drone by its ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the drone",
+            "schema": {
+              "$ref": "#/definitions/DroneDTO"
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Update an existing drone by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "droneDTO",
+            "in": "body",
+            "description": "Updated drone data",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DroneDTO"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully updated the drone",
+            "schema": {
+              "$ref": "#/definitions/DroneDTO"
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a drone by its ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successfully deleted the drone"
+          }
+        }
+      }
+    },
+    "/boundary": {
+      "get": {
+        "summary": "Calculate Boundary",
+        "responses": {
+          "200": {
+            "description": "Successfully calculated boundary",
+            "schema": {
+              "$ref": "#/definitions/Boundary"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "DroneDTO": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "latitude": {
+          "type": "number"
+        },
+        "longitude": {
+          "type": "number"
+        }
+      }
+    },
+    "Boundary": {
+      "type": "object",
+      "properties": {
+        "minLat": {
+          "type": "number"
+        },
+        "maxLat": {
+          "type": "number"
+        },
+        "minLon": {
+          "type": "number"
+        },
+        "maxLon": {
+          "type": "number"
+        }
+      }
+    },
+    "DroneDTOList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/DroneDTO"
+      }
+    }
+  }
+}

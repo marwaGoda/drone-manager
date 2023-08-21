@@ -51,3 +51,14 @@ The Drone Manager Service is a RESTful API designed to manage drone details and 
     ```bash
     gradle test
     ```
+
+## API Documentation
+
+You can view and test the API using  Swagger documentation.
+
+To access the API documentation:
+
+Download the  [swagger.json](https://github.com/marwaGoda/drone-manager/tree/master/src/main/resources/swagger.json) file.
+Visit [Swagger Editor](https://editor.swagger.io/).
+Upload the swagger.json file or paste its contents into the editor.
+The API documentation will be visualized, and you can interact with the API endpoints directly from there.
