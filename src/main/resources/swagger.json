@@ -137,40 +137,54 @@
     "DroneDTO": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "integer",
-          "format": "int64"
-        },
         "name": {
-          "type": "string"
+          "type": "string",
+          "description": "Name of the drone"
         },
-        "type": {
-          "type": "string"
+        "description": {
+          "type": "string",
+          "description": "Description of the drone"
         },
+        "position": {
+          "$ref": "#/definitions/Position"
+        },
+        "height": {
+          "type": "number",
+          "description": "Height of the drone"
+        },
+        "speed": {
+          "type": "number",
+          "description": "Speed of the drone"
+        }
+      },
+      "required": ["name", "description", "position", "height", "speed"]
+    },
+    "Position": {
+      "type": "object",
+      "properties": {
         "latitude": {
-          "type": "number"
+          "type": "number",
+          "description": "Latitude of the drone's position"
         },
         "longitude": {
-          "type": "number"
+          "type": "number",
+          "description": "Longitude of the drone's position"
         }
-      }
+      },
+      "required": ["latitude", "longitude"]
     },
     "Boundary": {
       "type": "object",
       "properties": {
-        "minLat": {
-          "type": "number"
+        "center": {
+          "$ref": "#/definitions/Position"
         },
-        "maxLat": {
-          "type": "number"
-        },
-        "minLon": {
-          "type": "number"
-        },
-        "maxLon": {
-          "type": "number"
+        "radius": {
+          "type": "number",
+          "description": "Radius of the boundary"
         }
-      }
+      },
+      "required": ["center", "radius"]
     },
     "DroneDTOList": {
       "type": "array",
